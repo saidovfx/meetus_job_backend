@@ -8,7 +8,7 @@ const MeetUsUserSchema = new mongoose.Schema({
     profileImgPublicId: { type: String },
     coverImgPublicId: { type: String },
     profileImgUrl: { type: String, default: '' },
-    coverImgUrl: { type: String, default: 'htpps://hhh' },
+    coverImgUrl: { type: String, default: '' },
     code: { type: String },
     location: { type: String },
     bio: { type: String },
@@ -36,6 +36,7 @@ const MeetUsUserSchema = new mongoose.Schema({
     birthdate: { type: String },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'MeetUsUser' }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'MeetUsUser' }],
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UserPosts' }]
 
 }, {
     timestamps: true
