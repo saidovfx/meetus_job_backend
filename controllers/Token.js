@@ -18,7 +18,7 @@ jwt.verify(refreshToken,process.env.JWT_REFRESH_SECRET,(err,user)=>{
     if(err) return res.status(403).json({message:'Refresh token iskirgan'})
         const accessToken=jwt.sign(
     {
-id:user.id,username:user.username
+                id:user.id,username:user.username
     },
     process.env.JWT_SECRET,
     {'expiresIn':'1d'}
