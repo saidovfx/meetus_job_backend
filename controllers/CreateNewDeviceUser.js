@@ -3,7 +3,6 @@ const User = require("../models/User")
 const express = require("express")
 const { randomUUID } = require('crypto')
 const { default: mongoose } = require("mongoose")
-require('dotenv').config()
 const isValidObjectId = (uid) => {
     return mongoose.Types.ObjectId.isValid(uid)
 }
@@ -14,13 +13,14 @@ module.exports.createUniqueUser = async (req, res) => {
         const existingUniqueUser = await UniqueUser.findOne({ uniqueId })
         if (existingUniqueUser) return res.status(409).json({ message: "Unique user already exists" })
         const newUniqueUser = new UniqueUser({ uniqueId })
-    res.cookie("uniqueID",uniqueId,{
+        await newUniqueUser.save()
+
+        res.cookie("uniqueID",uniqueId,{
         httpOnly:true,
         secure:false,
         sameSite:"lax",
         maxAge:365*24*60*60*1000
-    })
-        await newUniqueUser.save()
+         })
         res.status(201).json({ message: "Unique user created", newUniqueUser })
 
     } catch (error) {
