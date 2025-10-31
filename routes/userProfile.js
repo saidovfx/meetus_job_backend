@@ -94,7 +94,7 @@ router.post('/delete/coverImg', async (req, res) => {
     const userId = req.user.id
     const { coverImgPublicId } = req.body
     if (!isValidObjectId(userId) || !userId) return res.status(400).json({ warning: 'User id undefined' })
-    if (!coverImgPublicId) res.status(400).json({ warning: 'All fiels required' })
+    if (!coverImgPublicId)  return res.status(400).json({ warning: 'All fiels required' })
     try {
         const user = await User.findById(userId)
         if (!user) return res.status(404).json({ waring: 'User not found' })
@@ -117,7 +117,7 @@ router.post('/delete/coverImg', async (req, res) => {
 })
 
 
-router.post('/:id/delete/img', async (req, res) => {
+router.post('/delete/img', async (req, res) => {
     const id = req.user.id
 
     const { profileImgPublicId } = req.body

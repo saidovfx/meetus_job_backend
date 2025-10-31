@@ -117,7 +117,7 @@ const accessToken=jwt.sign(
 )
        res.cookie('token',accessToken,{
         httpOnly:true,
-        secure:process.env.PROJECT_STATE==="prodcution",
+        secure:process.env.PROJECT_STATE==="production",
         sameSite:"lax",
         maxAge:365*24*60*60*1000
 })
@@ -212,9 +212,11 @@ router.post('/reset-password', async (req, res) => {
   res.status(201).json({ message: "Parol mufaqatli yangilandi" })
 })
 
-router.post('/no-password', async (req, res) => {
-  const { idUser, username } = req.body
-  if (!idUser || !username) {
+router.post('/no-password/:id', async (req, res) => {
+  const { username } = req.body
+  const userId=req.params.id
+  if ( !userId || !username) {
+    
     res.status(401).json({ message: "id yoki usernmae yuq" })
     return
 
@@ -222,7 +224,7 @@ router.post('/no-password', async (req, res) => {
   const user = await User.findOne({ username })
   if (!user) return res.status(404).json({ message: "Foydalanuvchi topilmadi" })
 
-  if (user._id.toString() !== idUser) return res.status(401).json({ message: "Id mos emas" })
+  if (user._id.toString() !== userId) return res.status(401).json({ message: "Id mos emas" })
 
 
   const token = jwt.sign(
@@ -230,7 +232,6 @@ router.post('/no-password', async (req, res) => {
       id: user._id,
       role: user.role,
       username: user.username,
-      idUser: user.idUser,
     },
     process.env.JWT_SECRET,
     { expiresIn: "365d" }
