@@ -24,13 +24,12 @@ const allowedOrigins = [
   "https://47aeb20177e0.ngrok-free.app",
    "https://meetus-server-production.up.railway.app",
 ];
-
 app.use(cors({
-  origin: function(origin, callback) {
-    console.log(origin);
-    
-    if (allowedOrigins.includes(origin)) {
-      callback(null, origin); // ✅ aniq originni qo‘yayapmiz
+  origin: function (origin, callback) {
+    console.log("CORS origin:", origin);
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // ✅ ruxsat beramiz, null bo‘lsa ham
     } else {
       callback(new Error("CORS not allowed"));
     }
