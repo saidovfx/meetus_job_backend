@@ -7,9 +7,7 @@ import jwt from 'jsonwebtoken'
     try {
         const {username,password,role}=req.body
         const email=req.cookies.email
-
-        console.log(username,password,role,email);
-        
+        console.log(username,password,role,email);      
         if(!email || !username || !password || !role) return res.status(400).json({success:false,message:"User data is not enougth"})
         
          const user =await User.findOne({email})   

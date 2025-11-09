@@ -5,9 +5,7 @@ const authenticateToken=require('../middleware/authenticateToken.js')
 
 router.use(authenticateToken)
 router.post('/link',postLinks)
-router.put('/:id/put-link',  putLinks)
+router.put('/:id/put_link',  putLinks)
 router.post('/contact',  postContact)
 router.post('/contact-delete',  deleteContact)
-
-
 module.exports=router

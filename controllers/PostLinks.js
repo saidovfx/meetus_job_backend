@@ -16,10 +16,10 @@
                 if(!user) return res.status(404).json({message:"User topilmadi"})
                     user.website.push({name:name? name : '',link})
                 
-                await user.save()
-                res.status(200).json({message:'link saved ',user})
+                               await user.save()
+                                 res.status(200).json({message:'link saved ',user})
         } catch (error) {
-            res.status(500).json({message:"Server error",error})
+                  res.status(500).json({message:"Server error",error})
         }
     }
 
@@ -67,24 +67,24 @@ module.exports.postContact=async(req,res)=>{
       const user =await UserModel.findById(userId)
      if(!user) return res.status(404).json({mesage:"User not exist"})
 let updated=false
-        if(instagram && instagram.startsWith('https://www.instagram.com/') && instagram!==user.socialLinks.instagram) 
+        if( instagram!==user.socialLinks.instagram) 
             {
                 user.socialLinks.instagram=instagram
                 updated=true
             }
-      if (telegram && telegram.startsWith('https://t.me/') && telegram !== user.socialLinks.telegram) {
+      if ( telegram !== user.socialLinks.telegram) {
           user.socialLinks.telegram = telegram
           updated = true
       }
-      if (email && email.endsWith('@gmail.com') && email !== user.socialLinks.email) {
+      if ( email !== user.socialLinks.email) {
           user.socialLinks.email = email
           updated = true
       }
-      if (phone && phone.startsWith('+') && phone !== user.socialLinks.phone) {
+      if (phone !== user.socialLinks.phone) {
           user.socialLinks.phone = phone
           updated = true
       }
-      if (whatsApp && whatsApp.startsWith('https://wa.me/') && whatsApp !== user.socialLinks.whatsApp) {
+      if ( whatsApp !== user.socialLinks.whatsApp) {
           user.socialLinks.whatsApp = whatsApp
           updated = true
       }
@@ -93,8 +93,8 @@ let updated=false
            res.status(304).json({message:"Nothing to updated or post",user,instagram,telegram,email,phone,whatsApp})
             return
           }
-await user.save()
-res.status(200).json({message:"Social links successfully posted",user})
+           await user.save()
+        res.status(200).json({message:"Social links successfully posted",user})
   } catch (error) { 
         res.status(500).json({ message: "Server error", error:error.message })
     

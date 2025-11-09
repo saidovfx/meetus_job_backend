@@ -27,7 +27,7 @@ const parser = multer({ storage: storage })
 router.use(authenticateToken)
 
 
-router.post('/add-profile-img', parser.single('image'), async (req, res) => {
+router.post('/add_profile_img', parser.single('image'), async (req, res) => {
     const userId = req.user.id
     const imageUrl = req.file.path
     const publicId = req.file.filename
@@ -65,29 +65,39 @@ router.post('/add-profile-img', parser.single('image'), async (req, res) => {
         res.status(500).json({ error: 'Server error' })
     }
 })
+router.post('/cover_img', parser.single('image'), async (req, res) => {
+  const userId = req.user.id;
+
+  if (!isValidObjectId(userId) || !userId) 
+    return res.status(400).json({ warning: 'User id is undefined' });
+
+  if (!req.file) 
+    return res.status(400).json({ warning: 'No image uploaded' });
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ warning: 'User not found' });
 
 
-router.post('/cover-img', parser.single('image'), async (req, res) => {
-    const userId = req.user.id
-    const { coverImgPublicId, coverImgUrl } = req.body
-    if (!isValidObjectId(userId) || !userId) return res.status(400).json({ warning: 'User id is undefined' })
-    if (!coverImgUrl) return res.status(400).json({ warning: 'All fields required' })
-    try {
-        const user = await User.findById(userId)
-        if (!user) return res.status(404).json({ warning: 'User not found ' })
-        if (user.coverImgPublicId) {
-            await cloudinary.uploader.destroy(user.coverImgPublicId)
-        }
-        user.coverImgUrl = coverImgUrl
-        user.coverImgPublicId = coverImgPublicId
-        user.save()
-        return res.status(201).json({ success: 'Profile cover img updated ' })
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'cover_images',
+    });
 
-    } catch (error) {
-        console.log("Error on uploading cover img", error);
-        return res.status(500).json({ error: 'Server error' })
+    if (user.coverImgPublicId) {
+      await cloudinary.uploader.destroy(user.coverImgPublicId);
     }
-})
+
+    user.coverImgUrl = result.secure_url;
+    user.coverImgPublicId = result.public_id;
+
+    await user.save();
+    return res.status(201).json({ success: 'Profile cover img updated', user });
+
+  } catch (error) {
+    console.log("Error on uploading cover img", error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
 
 
 router.post('/delete/coverImg', async (req, res) => {
@@ -155,6 +165,8 @@ router.post('/delete/img', async (req, res) => {
 
 router.put('/edit', async (req, res) => {
     const { username, bio, fullname, location, gender, birthdate } = req.body
+
+    
     try {
 
         if (!isValidObjectId(req.user.id)) return res.status(400).json({ warning: "id is not defind or invalid" })
@@ -168,7 +180,7 @@ router.put('/edit', async (req, res) => {
         if (username && username !== currentUser.username) {
             updateFields.username = username;
             const existing = await User.findOne({ username })
-            if (existing) return res.status(400).json({ warning: 'Username alrready taken' })
+            if (existing) return res.status(409).json({ warning: 'Username alrready taken' })
         }
 
         if (bio !== currentUser.bio) updateFields.bio = bio

@@ -9,6 +9,8 @@ const MeetUsUserSchema = new mongoose.Schema({
     coverImgPublicId: { type: String },
     profileImgUrl: { type: String, default: '' },
     coverImgUrl: { type: String, default: '' },
+    resume:{type:String,default:''},
+    resumeId:{type:String},
     code: { type: String },
     location: { type: String },
     bio: { type: String },
