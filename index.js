@@ -4,11 +4,11 @@ import cookieParser from "cookie-parser";
 import passport from "passport";
 import session from "express-session";
 import dotenv from "dotenv";
-import path from "path"
-import { fileURLToPath } from  "url";
+import path from "path";
+import { fileURLToPath } from "url";
 import authGoogle from "./routes/auth.js";
 import "./utils/passport.js";
-
+import cors from "cors";
 
 import registerMeetUsUser from "./routes/registerMeetUsUser.js";
 import helpCenter from "./routes/helpCenter.js";
@@ -17,11 +17,11 @@ import userInformation from "./GetData/userInformation.js";
 import tokenRoutes from "./routes/tokenRoutes.js";
 import linkRoute from "./routes/linkRoute.js";
 import resume from "./routes/resume.js";
-
+import post_project from "./routes/post_project.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
-
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 app.use(
   session({
@@ -29,13 +29,12 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production", // https uchun true
+      secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 365 * 24 * 60 * 60 * 1000,
     },
   })
 );
-
 
 app.use(cookieParser());
 app.use(passport.initialize());
@@ -49,7 +48,7 @@ app.use("/api/token", tokenRoutes);
 app.use("/api/user", linkRoute);
 app.use("/api/auth", authGoogle);
 app.use("/resume", resume);
-//slomssa
+app.use("/posts", post_project);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDb Connected"))
@@ -65,7 +64,6 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "client/dist", "index.html"));
   }
 });
-
 
 const PORT = process.env.PORT || 1747;
 app.listen(PORT, () => console.log(` Server running under port  ${PORT} `));

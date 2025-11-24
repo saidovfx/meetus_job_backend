@@ -1,29 +1,55 @@
-const mongoose =require("mongoose")
+const mongoose = require("mongoose");
 
-const PostSchema=mongoose.Schema({
-    userId:{type:String, required:true},
-    imageUrl:{type:String},
-    vedioUrl:{type:String},
-    coverImgUrl:{type:String},
-    desc:{type:String},
-    likes:{type:[String],default:[]},
-    visibility:{type:String ,enum:['public','following','privite'],default:'public'},
-    views:{type:Number,default:0},
-    location:{type:String},
-    tags:{type:[String],default:[]},
-    dislikedBy:{type:[String],default:[]},
-    spamedBy:[
+const PostSchema = mongoose.Schema(
+  {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "jobusers" },
+
+    images: [
       {
-   spamedUserId:{type:String},
-   reason:{type:String},
-   createdAt:{type:Date ,default:Date.now}
-      }
+        imageUrl: { type: String },
+        imageId: { type: String },
+      },
     ],
-    savedBy:{type:[String],default:[]},
-    createdAt:{type:Date,default:Date.now},
-    updatedAt:{type:Date,default:Date.now}
 
+    videoUrl: { type: String },
+    videoId: { type: String },
 
+    title: { type: String, required: true },
+    desc: { type: String },
 
-})
+    likes: [
+      {
+        likedBy: { type: mongoose.Schema.Types.ObjectId, ref: "jobusers" },
+      },
+    ],
 
+    visibility: {
+      type: String,
+      enum: ["public", "following", "privite"],
+      default: "public",
+    },
+
+    views: { type: Number, default: 0 },
+    location: { type: String },
+    tags: { type: [String], default: [] },
+
+    spamedBy: [
+      {
+        spamedUserId: { type: String },
+        reason: { type: String },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+
+    savedBy: { type: [String], default: [] },
+
+    linkName: { type: String },
+    link: { type: String },
+    githubLink: { type: String },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export default mongoose.model("UserPosts", PostSchema);

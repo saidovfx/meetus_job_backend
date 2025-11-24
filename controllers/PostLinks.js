@@ -10,11 +10,12 @@
             const id=req.user.id
             if (!id || !isValidObjectId(id)) return res.status(400).json({ message: "Id is not defined or invalid id" })
             const {link,name}=req.body
-            if(!link) return res.status(400).json({message:"Link kerak "})
-                if(!link.startsWith('https://')) return res.status(400).json({message:'Link https bilan boshlanishi kerak'})
+            if(!link) return res.status(400).json({message:"Link kerak "}) 
+
+          if(!link.startsWith('https://')) return res.status(400).json({message:'Link https bilan boshlanishi kerak'})
                     const user=await UserModel.findById(id)
                 if(!user) return res.status(404).json({message:"User topilmadi"})
-                    user.website.push({name:name? name : '',link})
+                    user.website.push({name:name ? name : '',link})
                 
                                await user.save()
                                  res.status(200).json({message:'link saved ',user})
