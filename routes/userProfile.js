@@ -39,14 +39,11 @@ router.post('/add_profile_img', parser.single('image'), async (req, res) => {
     }
 
     try {
-
-
         const user = await User.findById(userId)
 
         if (!user) return res.status(404).json({ warning: "User not found" })
 
         if (user.profileImgPublicId) {
-
             await cloudinary.uploader.destroy(user.profileImgPublicId)
         }
 
@@ -77,7 +74,6 @@ router.post('/cover_img', parser.single('image'), async (req, res) => {
   try {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ warning: 'User not found' });
-
 
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: 'cover_images',
