@@ -40,6 +40,7 @@ const MeetUsUserSchema = new mongoose.Schema(
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "jobusers" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "jobusers" }],
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "UserPosts" }],
+    vacancy: [{ type: mongoose.Schema.Types.ObjectId, ref: "vacancy" }],
   },
   {
     timestamps: true,

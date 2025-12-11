@@ -13,7 +13,7 @@ import {
   put_project,
   get_my_projects,
   delete_project,
-} from "../controllers/post.posts.js";
+} from "../controllers/posts/post.posts.js";
 
 router.use(authenticateToken);
 
