@@ -18,6 +18,8 @@ import tokenRoutes from "./routes/tokenRoutes.js";
 import linkRoute from "./routes/linkRoute.js";
 import resume from "./routes/resume.js";
 import post_project from "./routes/post_project.js";
+import collaborators from "./routes/collaborators.routes/collaborators.js";
+import searchEngine from "./routes/search.engine/search.engine.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -49,6 +51,8 @@ app.use("/api/user", linkRoute);
 app.use("/api/auth", authGoogle);
 app.use("/api/resume", resume);
 app.use("/api/posts", post_project);
+app.use("/api/collaborators", collaborators);
+app.use("/api/search", searchEngine);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDb Connected"))

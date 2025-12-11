@@ -1,11 +1,16 @@
-const express= require('express')
-const { postLinks, putLinks, postContact, deleteContact } = require('../controllers/PostLinks')
-const router=express.Router()
-const authenticateToken=require('../middleware/authenticateToken.js')
+const express = require("express");
+const {
+  postLinks,
+  putLinks,
+  postContact,
+  deleteContact,
+} = require("../controllers/posts/PostLinks");
+const router = express.Router();
+const authenticateToken = require("../middleware/authenticateToken.js");
 
-router.use(authenticateToken)
-router.post('/link',postLinks)
-router.put('/:id/put_link',  putLinks)
-router.post('/contact',  postContact)
-router.post('/contact-delete',  deleteContact)
-module.exports=router
+router.use(authenticateToken);
+router.post("/link", postLinks);
+router.put("/:id/put_link", putLinks);
+router.post("/contact", postContact);
+router.post("/contact-delete", deleteContact);
+module.exports = router;

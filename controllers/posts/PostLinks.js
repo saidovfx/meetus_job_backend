@@ -1,11 +1,11 @@
-const User = require("../models/User");
-const UserModel = require("../models/User");
-const mongoose = require("mongoose");
+import User from "../../models/User.js";
+import UserModel from "../../models/User.js";
+import mongoose from "mongoose";
 const isValidObjectId = (id) => {
   return mongoose.Types.ObjectId.isValid(id);
 };
 
-module.exports.postLinks = async (req, res) => {
+export const postLinks = async (req, res) => {
   try {
     const id = req.user.id;
     if (!id || !isValidObjectId(id))
@@ -30,7 +30,7 @@ module.exports.postLinks = async (req, res) => {
   }
 };
 
-module.exports.putLinks = async (req, res) => {
+export const putLinks = async (req, res) => {
   try {
     const userId = req.user.id;
     const id = req.params.id;
@@ -65,7 +65,7 @@ module.exports.putLinks = async (req, res) => {
   }
 };
 
-module.exports.postContact = async (req, res) => {
+export const postContact = async (req, res) => {
   try {
     const userId = req.user.id;
     const { instagram, telegram, phone, whatsApp, email } = req.body;
@@ -99,17 +99,15 @@ module.exports.postContact = async (req, res) => {
       updated = true;
     }
     if (!updated) {
-      res
-        .status(304)
-        .json({
-          message: "Nothing to updated or post",
-          user,
-          instagram,
-          telegram,
-          email,
-          phone,
-          whatsApp,
-        });
+      res.status(304).json({
+        message: "Nothing to updated or post",
+        user,
+        instagram,
+        telegram,
+        email,
+        phone,
+        whatsApp,
+      });
       return;
     }
     await user.save();
@@ -119,7 +117,7 @@ module.exports.postContact = async (req, res) => {
   }
 };
 
-module.exports.deleteContact = async (req, res) => {
+export var deleteContact = async (req, res) => {
   try {
     const userId = req.user.id;
     if (!userId || !isValidObjectId(userId))
@@ -139,11 +137,9 @@ module.exports.deleteContact = async (req, res) => {
 
     const validKeys = ["instagram", "telegram", "phone", "whatsApp", "email"];
     if (!validKeys.includes(deleteObject))
-      return res
-        .status(400)
-        .json({
-          message: `Message ${deleteObject} is not equal to any contact`,
-        });
+      return res.status(400).json({
+        message: `Message ${deleteObject} is not equal to any contact`,
+      });
 
     user.socialLinks[deleteObject] = "";
     user.markModified("socialLinks");

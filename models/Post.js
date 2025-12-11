@@ -15,14 +15,40 @@ const PostSchema = mongoose.Schema(
     videoId: { type: String },
 
     title: { type: String, required: true },
-    desc: { type: String },
 
+    shortDescription: { type: String, maxlength: 180 },
+    fullDescription: { type: String },
+    skills: {
+      type: [String],
+      set: (v) => v.map((s) => s.trim().toLowerCase()),
+    },
+
+    category: {
+      type: String,
+      enum: [
+        "web-development",
+        "mobile-development",
+        "ui-ux",
+        "graphic-design",
+        "3d",
+        "video-edit",
+        "ai",
+        "other",
+      ],
+      default: "other",
+    },
+
+    live: String,
+    github: String,
+    youtube: String,
+    link: String,
     likes: [
       {
         likedBy: { type: mongoose.Schema.Types.ObjectId, ref: "jobusers" },
       },
     ],
 
+    saves: [{ type: mongoose.Schema.Types.ObjectId, ref: "jobusers" }],
     views: { type: Number, default: 0 },
     location: { type: String },
     tags: { type: [String], default: [] },
@@ -35,9 +61,21 @@ const PostSchema = mongoose.Schema(
       },
     ],
 
+    status: {
+      type: String,
+      enum: ["draft", "published", "in-progress", "completed", "archived"],
+      default: "published",
+    },
+
+    collaborators: [
+      {
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "jobusers" },
+        role: String,
+        accepted: { type: Boolean, default: false },
+      },
+    ],
+
     savedBy: { type: [String], default: [] },
-    linkName: { type: String },
-    link: { type: String },
     reports: [
       {
         reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: "jobusers" },
