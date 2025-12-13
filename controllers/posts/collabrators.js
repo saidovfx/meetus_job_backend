@@ -62,10 +62,37 @@ export const acceptPost = async (req, res) => {
   }
 };
 
-export const delete_collaborator = async (rej, res) => {
+export const delete_collaborator = async (req, res) => {
   try {
     const userId = req.user.id;
     const collaboratorId = req.params.id;
     const postId = req.params.postId;
-  } catch (error) {}
+  } catch (error) {
+    console.log("Error ocured while deleting collaborator");
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const get_collaborator = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    console.log("sa");
+
+    const myCollaborators = await Calloborators.find({
+      collaboratorId: userId,
+      accepted: false,
+      rejected: false,
+    }).populate("ownerId", "profileImgUrl fullname username");
+
+    if (myCollaborators.length === 0) {
+      return res.status(304).json({ success: "Nothing to send" });
+    }
+    res.status(200).json({
+      success: "Some collaborator post ",
+      collaborator: myCollaborators,
+    });
+  } catch (error) {
+    console.log("Error ocured while getting collaborator");
+    return res.status(500).json({ error: "Internal server error" });
+  }
 };

@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 import Calloborators from "../models/Calloborators.js";
-
+import mongoose from "mongoose";
 export const send_post_to_collaborators = async (
   collaborators,
   userId,
@@ -21,9 +21,9 @@ export const send_post_to_collaborators = async (
 
     for (const item of collaboratorsData) {
       const collaborator = new Calloborators({
-        ownerId: userId,
-        collaboratorId: item.userId,
-        postId: project._id,
+        ownerId: new mongoose.Types.ObjectId(userId),
+        collaboratorId: new mongoose.Types.ObjectId(item.userId),
+        postId: new mongoose.Types.ObjectId(project._id),
         role: item.role,
       });
 

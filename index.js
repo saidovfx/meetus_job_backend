@@ -20,6 +20,7 @@ import resume from "./routes/resume.js";
 import post_project from "./routes/post_project.js";
 import collaborators from "./routes/collaborators.routes/collaborators.js";
 import searchEngine from "./routes/search.engine/search.engine.js";
+import get_posts from "./routes/get.post.routes.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -53,6 +54,7 @@ app.use("/api/resume", resume);
 app.use("/api/posts", post_project);
 app.use("/api/collaborators", collaborators);
 app.use("/api/search", searchEngine);
+app.use("/get_post", get_posts);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDb Connected"))

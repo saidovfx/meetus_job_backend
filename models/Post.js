@@ -25,16 +25,7 @@ const PostSchema = mongoose.Schema(
 
     category: {
       type: String,
-      enum: [
-        "web-development",
-        "mobile-development",
-        "ui-ux",
-        "graphic-design",
-        "3d",
-        "video-edit",
-        "ai",
-        "other",
-      ],
+
       default: "other",
     },
 
